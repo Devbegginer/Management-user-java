@@ -1,0 +1,42 @@
+package br.com.portfolioweb.crud.config;
+
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+import br.com.portfolioweb.crud.entities.User;
+import br.com.portfolioweb.crud.repositories.UserRepository;
+
+// essa e uma classe de configuracao
+@Configuration 
+//classe e para o perfil de teste
+//spring.profiles.active = test
+@Profile("test")
+public class TestConfig implements CommandLineRunner{
+
+	//atributo
+	@Autowired
+	private UserRepository userRepository;
+
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+		
+		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
+		User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
+		User u3 = new User(null, "Lucas Silva", "lucas.silva@example.com", "986543210", "123456");
+		User u4 = new User(null, "Fernanda Costa", "fernanda.costa@example.com", "975312468", "123457");
+		User u5 = new User(null, "Roberto Souza", "roberto.souza@example.com", "984512379", "123456");
+		User u6 = new User(null, "Juliana Mendes", "juliana.mendes@example.com", "973645982", "123456");
+		User u7 = new User(null, "Carlos Oliveira", "carlos.oliveira@example.com", "982134567", "123456");
+		User u8 = new User(null, "Amanda Ribeiro", "amanda.ribeiro@example.com", "971236854", "123456");
+		User u9 = new User(null, "Gustavo Ferreira", "gustavo.ferreira@example.com", "989654321", "123456");
+		User u10 = new User(null, "Beatriz Lima", "beatriz.lima@example.com", "976543219", "123456");
+		userRepository.saveAll(Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8,u9,u10));
+	} 
+	 
+}
+ 

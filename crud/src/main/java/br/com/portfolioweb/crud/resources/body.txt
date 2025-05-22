@@ -1,0 +1,71 @@
+package br.com.portfolioweb.crud.resources;
+
+import java.net.URI;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import br.com.portfolioweb.crud.entities.User;
+import br.com.portfolioweb.crud.services.UserService;
+
+// criacao de anotattions (anotacoes) do spring boot
+//RestController = define a classe como controlador
+// RequestMapping = mapear requisições HTTP para métodos ou classes em um Controller.
+@RestController
+@RequestMapping(value = "/users")
+public class userResource {
+
+	@Autowired
+	//instance Class UserService as service
+	// @Autowired = automatic dependency injection.
+	private UserService service;
+	
+	@GetMapping
+	//used to map HTTP requests of type GET to a specific 
+	//method within a controller
+	public ResponseEntity<List<User>> findAll() {
+
+		List<User> list = service.findAll(); 
+		//Calls the findAll() method of the UserService, 
+		//which returns a list of users.
+		return ResponseEntity.ok().body(list);
+		//Returns the list inside a ResponseEntity,
+		//with HTTP status 200 OK.
+	}
+	//deploy of method findById
+	//Endpoint
+	
+	//wrong: @GetMapping(value= "/(id)")
+	@GetMapping(value= "/{id}")
+	//class
+	//return 1 user per time (1 id = 1 user)
+	public ResponseEntity<User> findById(@PathVariable Long id) {
+		// Captures the URL value and converts it to Long.
+		//ex: GET /users/5
+		// Catch the number 5
+		User user = service.findById(id);
+		return ResponseEntity.ok().body(user);
+	}
+	//this method isn`t method Get
+	@PostMapping
+	public ResponseEntity<User> insert(@RequestBody User user) {
+		user = service.insert(user);
+		//now, let`s deploy complex http status (Http 201) 
+		// recommended for this situation
+		// HTTP 201 = indicates that some information has been inserted into the database
+		// RequestBody = Automatically converts the JSON of the request to a User object.
+		
+		//variable URI
+		URI uri =  ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();		
+		return ResponseEntity.created(uri).body(user);
+		
+	}
+}
